@@ -4,8 +4,8 @@ from django.http import HttpResponse
 
 def create_user(request):
     if request.method =='GET':
-        usuários = usuario.objects.all()
-        return render(request, 'create_user.html' , {'usuarios': usuários})
+        usuariosdb = usuario.objects.all()
+        return render(request, 'create_user.html' , {'usuarios': usuariosdb})
     
     elif request.method == 'POST':
         name = request.POST.get('nome')
