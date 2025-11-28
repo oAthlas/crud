@@ -57,3 +57,25 @@ Vamos fazer nosso botão como uma coluna da nossa tabela. Nomeei o header como D
 A âncora só irá aparecer caso haja pelo menos 1 usuário no banco, ao clicar ela o redireciona para a nossa url dinâmica, antes delete_user/<int:id>, com as tags dinâmicas se torna delete_user/1 (ou o número correspondente ao id do objeto no banco). Isso faz nossa função do view capturar esse valor na nossa variável de usuariodel e então a deleta, após isso o redirect mando o usuário de volta a página principal.
 
 ====================================
+
+Chegamos ao final do nosso CRUD e vamos fazer a última parte, o Update, essa parte é bem similar ao Delete, a grande diferença é o que vamos fazer com os dados após termos acesso a eles. Lembram-se que no inicio dessa documentação, lá no Read, eu disse para fazer os campos de exibição do tipo input="text"? Faremos um Update integrado ao Read a partir disso.
+
+Com eu disse antes, o Update será bem similar o Delete, então já podemos começar  criando uma função no views.py com request e id (trabalharemos com id novamente) e uma variável usuarioup = get_object_or_404(usuario, id=id). Praticamente idêntico ao delete, não é mesmo? Faremos o mesmo com o urls.py: Uma url usuario_update/<int:id>, views.update_user chamada update_user. Memsma lógica do delete, o id trazido da url pelo for é recebido nessa nossa variável, agora vamos ver o que fazemos com ele.
+
+Antes, no Delete, apenas deletavámos o objeto que o get pegava através do id, agora vamos atribuir novos valores a eles, de uma forma similar ao que fizemos no Create. 
+
+name = request.POST.get('nome')
+email = request.POST.get('email')
+
+Bastante similar ao Create em... Isso pega os campos nome e email do nosso input de texto (que atualmente só exibe os dados) e guarda no nome das colunas do banco de dados. Uma vez com o id da linha que queremos atualizar e os dados novos basta convergir. 
+
+usuarioup.name = name
+usuarioup.email = email
+
+E então basta salvar com usuarioup.save que teremos nossos dados atualizados. Mais uma vez, return redirect manda o usuário de volta para a mesma página, já com os dados atualizados. Agora vamos configurar isso no HTML, que também é bem parecido com o que foi o Delete.
+
+Note a presença do POST na request, enviaremos formulário, crie uma nova linha na tabela do HTML, nomeei o Reader de Update e criei um input do tipo submit dentro de um formulário, lembre-se de incluir os campos também, eles são cruciais já que estamo fazendo um Read e um Update unidos, os mesmos campos que usamos para ver os dados do banco vamos usar para atualizá-lo via formulário. A esse input chamei de Update também e coloquei estilo com Bootstrap, algo importante também é deixar tudo dentro do for.
+
+A configuração inportante aqui é no <form> e não no botão em si, faremos exatamente a mesma coisa que fizemos no Delete para pegar o id através do for: {% url 'update_user' i.id %}. Terminamos? Não, quase me esqueço do csrf token novamente, coloque-o logo abaixo do form, em tags: {% csrf_token %}. Agora sim, basta irmos ao site testar.
+
+Um adendo importante que nesse projeto em específico pode não ter ficado claro: O Update geralmente precisa do mesmo esquema de GET e POST para receber e exibir informações, mas no nosso caso de Read e Update unificados isso não é necessário porque a própria página já entrega os dados preenchidos, então não existe uma tela separada para carregar via GET. Caso tente reproduzir usando páginas separadas é importante separar POST de GET.

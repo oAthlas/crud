@@ -26,14 +26,14 @@ def delete_user(request, id):
     return redirect('create_user')
 
 def update_user(request, id):
-    ususário = get_object_or_404(usuario, id=id)
+    ususarioup = get_object_or_404(usuario, id=id)
 
     name = request.POST.get('nome')
     email = request.POST.get('email')
     
-    ususário.name = name
-    ususário.email = email
-    ususário.save()
+    ususarioup.name = name
+    ususarioup.email = email
+    ususarioup.save()
 
     return redirect('create_user')
             
