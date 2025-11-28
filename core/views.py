@@ -21,8 +21,8 @@ def create_user(request):
         return redirect('create_user')
     
 def delete_user(request, id):
-    ususário = get_object_or_404(usuario, id=id)
-    ususário.delete()
+    ususariodel = get_object_or_404(usuario, id=id)
+    ususariodel.delete()
     return redirect('create_user')
 
 def update_user(request, id):
